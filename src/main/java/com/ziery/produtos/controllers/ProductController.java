@@ -3,6 +3,7 @@ package com.ziery.produtos.controllers;
 import com.ziery.produtos.dtos.ProductRecordDto;
 import com.ziery.produtos.models.ProductModel;
 import com.ziery.produtos.repositories.ProductRepository;
+import com.ziery.produtos.services.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ public class ProductController {
 
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private ProductService productService;
 
     //Aqui na classe no método save, a requisição vai para a classe dto onde é feito as validações iniciais, e depois é convertido para model e salvo no banco de dados
     @PostMapping("/products")
@@ -31,8 +34,12 @@ public class ProductController {
 
     //Retorna todos os produtos cadastrados
     @GetMapping("/products")
-    public ResponseEntity<List<ProductModel>> getAllProducts() {
-        return ResponseEntity.status(HttpStatus.OK).body(productRepository.findAll());
+    public ResponseEntity<Object> getAllProducts() {
+        List<ProductModel> productModels = productRepository.findAll();
+        if (productModels.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhum produto encontrado");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(productService.findAll());
     }
 
     //Buscando por id
@@ -67,6 +74,8 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK).body("Product deleted successfully");
 
     }
+
+
 
 
 }
