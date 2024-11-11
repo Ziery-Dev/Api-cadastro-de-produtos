@@ -40,6 +40,15 @@ public class ProductService {
 
     }
     //deletar produto
+    public boolean deleteProduct(UUID id) {
+        Optional <ProductModel> productModel = buscarPorId(id);
+        if(productModel.isEmpty()) {
+            return false;
+
+        }
+        productRepository.delete(productModel.get());
+        return true;
+    }
 
 
 
