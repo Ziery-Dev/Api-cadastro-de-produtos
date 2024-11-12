@@ -22,26 +22,26 @@ public class ProductService {
     }
 
     //Retornar todos produtos
-    public  List<ProductModel> findAll() {
+    public  List<ProductModel> findAllProducts() {
        return productRepository.findAll();
 
     }
 
     //Buscar por id
-    public Optional<ProductModel> buscarPorId(UUID id) {
+    public Optional<ProductModel> findProdutById(UUID id) {
         return productRepository.findById(id);
     }
 
     //atualizar produto
     public ProductModel updateProduct( UUID id) {
-        Optional <ProductModel> productModel = buscarPorId(id);
+        Optional <ProductModel> productModel = findProdutById(id);
         return  productRepository.save(productModel.get());
 
 
     }
     //deletar produto
     public boolean deleteProduct(UUID id) {
-        Optional <ProductModel> productModel = buscarPorId(id);
+        Optional <ProductModel> productModel = findProdutById(id);
         if(productModel.isEmpty()) {
             return false;
 

@@ -18,8 +18,7 @@ import java.util.UUID;
 @RestController
 public class ProductController {
 
-    @Autowired
-    private ProductRepository productRepository;
+
     @Autowired
     private ProductService productService;
 
@@ -35,17 +34,17 @@ public class ProductController {
     //Retorna todos os produtos cadastrados
     @GetMapping("/products")
     public ResponseEntity<Object> getAllProducts() {
-        List<ProductModel> productModels = productRepository.findAll();
+        List<ProductModel> productModels = productService.findAllProducts();
         if (productModels.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no products found");
         }
-        return ResponseEntity.status(HttpStatus.OK).body(productService.findAll());
+        return ResponseEntity.status(HttpStatus.OK).body(productService.findAllProducts());
     }
 
     //Buscando por id
     @GetMapping("/products/{id}")
     public ResponseEntity<Object> findProductById(@PathVariable (value = "id") UUID id) {
-        Optional<ProductModel> productModel0 = productService.buscarPorId(id); //faz a busca do id inserido
+        Optional<ProductModel> productModel0 = productService.findProdutById(id); //faz a busca do id inserido
         if(productModel0.isEmpty()) {  //resposta se o id não for encontrado
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found");
         }
@@ -55,7 +54,7 @@ public class ProductController {
     //Atualizar produto existente
     @PutMapping("/products/{id}")
     public  ResponseEntity<Object> updateProduct(@PathVariable(value = "id") UUID id, @RequestBody @Valid ProductRecordDto productRecordDto) {
-        Optional<ProductModel> productModel0 = productService.buscarPorId(id);
+        Optional<ProductModel> productModel0 = productService.findProdutById(id);
         if(productModel0.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found");
         }
